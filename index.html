@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PALDOTRONS - SKU Generator</title>
+
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script type="py" src="./main.py"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            background-image: url('Service.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            padding: 35px 70px;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .brand {
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+        }
+
+        .brand .music-icon {
+            width: 22px;
+            height: 28px;
+            fill: #ffffff;
+        }
+
+        nav {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        nav a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #ffffff;
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 70px;
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 18px;
+            padding: 40px 32px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-card h2 {
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 700;
+        }
+
+        input, select {
+            width: 100%;
+            height: 48px;
+            padding: 0 18px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 24px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            backdrop-filter: blur(6px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        select option {
+            background: #0e1e2c;
+            color: #ffffff;
+        }
+
+        .btn-submit {
+            width: 100%;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 24px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: #ffffff;
+            color: #0e1e2c;
+        }
+
+        .btn-clear {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: inherit;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .btn-clear:hover {
+            color: #ffffff;
+        }
+
+       
+        .inventory-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 35px;
+            text-transform: uppercase;
+        }
+
+        .generated-sku-container {
+            margin-bottom: 45px;
+            font-size: 1rem;
+            letter-spacing: 2.5px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+        }
+
+        .generated-sku-container span {
+            color: #ffffff;
+            margin-left: 8px;
+        }
+
+        .records-section {
+            width: 100%;
+            text-align: left;
+        }
+
+        .records-title {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        th {
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.65);
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 14px 10px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            PALDOTRONS
+            <svg class="music-icon" viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.5 2C18.5 2 12 5.5 12 12.5V23C11 22.3 9.6 22 8 22C4.7 22 2 24.2 2 27C2 29.8 4.7 32 8 32C11.3 32 14 29.8 14 27V10.8C16.8 9.5 19.5 8 22 6.2V2.5C20.8 3.3 19.6 4.1 18.5 2Z"/>
+            </svg>
+        </div>
+        <nav>
+            <a href="index.html" class="active">SKU Generator</a>
+            <a href="receipts.html">Receipt Generator</a>
+        </nav>
+    </header>
+
+    <main>
+       
+        <div class="form-card">
+            <h2>SKU GENERATOR</h2>
+
+            <div class="input-group">
+                <label for="format_type">FORMAT / MEDIA CATEGORY:</label>
+                <select id="format_type">
+                    <option value="VN">Vinyl LP (12")</option>
+                    <option value="CD">CD Album</option>
+                    <option value="CS">Cassette Tape</option>
+                    <option value="DG">Digital Album</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="artist_name">ARTIST / BAND NAME:</label>
+                <input type="text" id="artist_name" placeholder="e.g. IV OF SPADES">
+            </div>
+
+            <div class="input-group">
+                <label for="album_title">ALBUM / ITEM TITLE:</label>
+                <input type="text" id="album_title" placeholder="e.g. CLAPCLAPCLAP!">
+            </div>
+
+            <div class="input-group">
+                <label for="stock_qty">STOCK QUANTITY:</label>
+                <input type="text" id="stock_qty" placeholder="e.g. 25">
+            </div>
+
+            <button type="button" class="btn-submit" py-click="create_sku">GENERATE ALBUM SKU</button>
+            <button type="button" class="btn-clear" py-click="clear_inventory">CLEAR ALL SKUS</button>
+        </div>
+
+       
+        <div class="inventory-panel">
+            <div class="section-tag">MUSIC ALBUMS AND SONGS</div>
+            <h1 class="main-title">PALDOTRON'S<br>ARCHIVES</h1>
+
+            <div class="generated-sku-container">
+                GENERATED SKU: <span id="sku_result">---</span>
+            </div>
+
+            <div class="records-section">
+                <div class="records-title">INVENTORY RECORDS</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SKU CODE</th>
+                            <th>FORMAT</th>
+                            <th>ARTIST</th>
+                            <th>TITLE</th>
+                            <th>QTY</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory_body">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

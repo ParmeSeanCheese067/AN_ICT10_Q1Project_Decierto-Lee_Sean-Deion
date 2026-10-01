@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PALDOTRONS - Album Order Receipt</title>
+
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script type="py" src="./main.py"></script>
+
+    <script>
+        function selectAutofillSku(sku) {
+            const input = document.getElementById("scan_sku");
+            if (input) {
+                input.value = sku;
+            }
+            const box = document.getElementById("autofill_box");
+            if (box) box.style.display = "none";
+        }
+
+      
+        document.addEventListener("click", function(event) {
+            const box = document.getElementById("autofill_box");
+            const input = document.getElementById("scan_sku");
+            if (box && input && !input.contains(event.target) && !box.contains(event.target)) {
+                box.style.display = "none";
+            }
+        });
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            background-image: url('Service.png');
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 25px 60px;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0 35px 0;
+        }
+
+        .brand {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #ffffff;
+        }
+
+        main {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .content-panel {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.4);
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 20px;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+            text-align: center;
+            position: relative;
+        }
+
+        label {
+            font-size: 0.68rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            height: 42px;
+            padding: 0 16px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            backdrop-filter: blur(6px);
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .autofill-container {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            z-index: 1000;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .autofill-header {
+            padding: 8px 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #666666;
+            background: #f4f4f4;
+            border-bottom: 1px solid #e5e5e5;
+            font-weight: 700;
+        }
+
+        .autofill-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .autofill-item {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .autofill-item:last-child {
+            border-bottom: none;
+        }
+
+        .autofill-item:hover {
+            background: #f0f0f0;
+        }
+
+        .autofill-sku {
+            color: #000000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            min-width: 95px;
+        }
+
+        .autofill-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .autofill-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #000000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .autofill-subtitle {
+            font-size: 0.7rem;
+            color: #666666;
+        }
+
+        .receipt-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 0.88rem;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .row .label {
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 400;
+        }
+
+        .row .value {
+            font-weight: 600;
+        }
+
+        .two-col-dates {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .date-box .lbl {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 1.2px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 4px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .date-box .val {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .btn-pill {
+            width: 100%;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-pill:hover {
+            background: #ffffff;
+            color: #0e1e2c;
+        }
+
+        footer {
+            margin-top: auto;
+            padding-top: 45px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.65);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            PALDOTRONS
+        </div>
+        <nav>
+            <a href="index.html">SKU Generator</a>
+            <a href="receipts.html" class="active">Receipt Generator</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="content-panel">
+            <hr class="divider">
+
+            <h1>ORDER SUMMARY</h1>
+            <p class="subtitle">Vinyl & Digital Album Order Receipt</p>
+
+            <div class="input-group">
+                <label for="scan_sku">ENTER / SCAN SKU CODE:</label>
+                <input type="text" id="scan_sku" placeholder="e.g. VNIVCL25" autocomplete="off" py-focus="render_autofill_box">
+
+                <div id="autofill_box" class="autofill-container" style="display: none;">
+                    <div class="autofill-header">SAVED ALBUM SKUS</div>
+                    <div id="autofill_list" class="autofill-list"></div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-pill" py-click="scan_sku">ADD SKU TO RECEIPT</button>
+
+            <hr class="divider">
+
+            <div id="printable_receipt">
+                <div class="two-col-dates">
+                    <div class="date-box">
+                        <span class="lbl">TRANSACTION DATE</span>
+                        <span class="val" id="receipt_date">---</span>
+                    </div>
+                    <div class="date-box">
+                        <span class="lbl">STORE LOCATION</span>
+                        <span class="val">PALDOTRONS MUSIC STORE</span>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="input-group" style="margin-bottom: 8px;">
+                    <label>PURCHASED ITEMS:</label>
+                </div>
+
+                <div id="receipt_items_list" class="receipt-details"></div>
+
+                <hr class="divider">
+
+                <div class="total-row">
+                    <span>Total Amount</span>
+                    <span>₱<span id="receipt_total">0.00</span></span>
+                </div>
+            </div>
+
+            <hr class="divider">
+        </div>
+    </main>
+
+    <footer>
+        ALL RIGHTS RESERVED TO PALDOTRONS 2026
+    </footer>
+
+</body>
+</html>
